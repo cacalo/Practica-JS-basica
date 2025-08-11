@@ -8,91 +8,169 @@
 
 // 1 Duplicar
 function reto1Duplicar() {
-
+  const container = document.getElementById("duplicateBoxContainer");
+  const newBox = container.children[0].cloneNode(true);
+  container.appendChild(newBox);
 }
 // 2 Modo oscuro
 function reto3ModoOscuro() {
-
+  document.body.classList.toggle("dark");
+  const button = document.getElementById("darkModeBtn");
+  button.textContent = document.body.classList.contains("dark") ? "Modo Claro" : "Modo Oscuro";
 }
 // 3 Habilitar botón
 function reto17Habilitar() {
-
+  const termsCheckbox = document.getElementById("termsChk");
+  const acceptBtn = document.getElementById("acceptBtn");
+  acceptBtn.disabled = !termsCheckbox.checked;
 }
 // 4 Número aleatorio (1-10)
 function reto20NumeroAleatorio() {
-
+  const randomNumber = Math.floor(Math.random() * 10) + 1;
+  const randomNumberSpan = document.getElementById("randomNumberSpan");
+  randomNumberSpan.textContent = randomNumber;
 }
 // 5 Contador
 function reto4Incrementar() {
-
+  const counterValue = document.getElementById("counterValue");
+  counterValue.textContent = Math.min(parseInt(counterValue.textContent) + 1,100);
 }
 function reto4Decrementar() {
-
+  const counterValue = document.getElementById("counterValue");
+  counterValue.textContent = Math.max(parseInt(counterValue.textContent) - 1,0);
 }
 // 6 Mostrar / Ocultar
 function reto10ToggleTexto() {
-
+  const textP = document.getElementById("toggleTextP");
+  const button = document.getElementById("toggleTextBtn");
+  textP.classList.toggle("hidden");
+  button.textContent = textP.classList.contains("hidden")
+    ? "Mostrar"
+    : "Ocultar";
 }
 // 7 Mayúsculas
 function reto2OrdenarFrutas() {
-
+  const list = document.getElementById("fruitList");
+  Array.from(list.children).forEach((li) => {
+    li.textContent = li.textContent.toUpperCase();
+  });
 }
 // 8 Invertir texto
 function reto6Invertir() {
-
+  const input = document.getElementById("reverseInput");
+  const output = document.getElementById("reverseOutput");
+  output.textContent = input.value.split("").reverse().join("");
 }
 // 9 Filtrar
 function reto5Filtrar() {
-
+  const filterInput = document.getElementById("filterInput");
+  const filterText = filterInput.value.toLowerCase();
+  const animalList = document.getElementById("animalList");
+  Array.from(animalList.children).forEach((item) => {
+    item.style.display = item.textContent.toLowerCase().includes(filterText)
+      ? ""
+      : "none";
+  });
 }
 function reto5Limpiar() {
-
+  const filterInput = document.getElementById("filterInput");
+  filterInput.value = "";
+  reto5Filtrar();
 }
 // 10 Sumar números
 function reto7Sumar() {
-
+  const a = document.getElementById("sumA");
+  const b = document.getElementById("sumB");
+  const res = document.getElementById("sumResult");
+  if (!a || !b || !res) return;
+  const va = parseFloat(a.value) || 0;
+  const vb = parseFloat(b.value) || 0;
+  res.textContent = String(va + vb);
 }
 // 11 Contar caracteres
 function reto11Contar() {
-
+  const textarea = document.getElementById("charTextarea");
+  const countSpan = document.getElementById("charCountSpan");
+  countSpan.textContent = textarea.value.length;
 }
 // 12 Ciclar color
 let _cicloIndex = 0;
 const _cicloColores = ["#ff595e", "#1982c4", "#6a4c93", "#8ac926"];
 function reto8CiclarColor() {
-
+  const box = document.getElementById("colorCycleBox");
+  _cicloIndex = (_cicloIndex + 1) % _cicloColores.length;
+  box.style.backgroundColor = _cicloColores[_cicloIndex];
 }
 // 13 Alternar forma
 function reto9ColorAleatorio() {
-
+  const box = document.getElementById("shapeBox");
+  const state = document.getElementById("shapeState");
+  if (!box || !state) return;
+  const isCircle = box.style.borderRadius === "50%";
+  if (isCircle) {
+    box.style.borderRadius = "6px";
+    state.textContent = "Cuadrado";
+  } else {
+    box.style.borderRadius = "50%";
+    state.textContent = "Círculo";
+  }
 }
 // 14 Agregar elemento
 function reto12Agregar() {
-
+  const input = document.getElementById("addItemInput");
+  const newItem = document.createElement("li");
+  newItem.textContent = input.value;
+  document.getElementById("addItemList").appendChild(newItem);
+  input.value = "";
 }
 // 15 Eliminar último
 function reto13EliminarUltimo() {
-
+  const removeList = document.getElementById("removeList");
+  const lastItem = removeList.lastElementChild;
+  if (lastItem) removeList.removeChild(lastItem);
 }
 // 16 No vacío
 function reto14ValidarEmail() {
-
+  const input = document.getElementById("emailInput");
+  if (!input) return;
+  const ok = input.value.trim().length > 0;
+  input.classList.toggle("valido", ok);
+  input.classList.toggle("invalido", !ok);
 }
 // 17 Celsius a Fahrenheit
 function reto16Convertir() {
-
+  const celsiusInput = document.getElementById("celsiusInput");
+  const fahrenheitResult = document.getElementById("fahrenheitResult");
+  const celsius = parseFloat(celsiusInput.value);
+  const fahrenheit = (celsius * 9) / 5 + 32;
+  fahrenheitResult.textContent = fahrenheit.toFixed(1);
 }
 // 18 Divisible
 function reto15SeleccionActiva() {
-
+  const numEl = document.getElementById("divNum");
+  const denEl = document.getElementById("divDen");
+  const resEl = document.getElementById("divideResult");
+  if (!numEl || !denEl || !resEl) return;
+  const n = parseFloat(numEl.value);
+  const d = parseFloat(denEl.value);
+  if (!isFinite(d) || d === 0) {
+    resEl.textContent = "Error";
+    return;
+  }
+  resEl.textContent = n % d === 0 ? "SI" : "NO";
 }
 // 19 Ordenar números
 function reto18OrdenarNumeros() {
-
+  const numberList = document.getElementById("numberList");
+  const items = Array.from(numberList.children);
+  items.sort((a, b) => parseInt(a.textContent) - parseInt(b.textContent));
+  items.forEach((item) => numberList.appendChild(item));
 }
 // 20 Rotar lista
 function reto19Mezclar() {
-
+  const list = document.getElementById("shuffleList");
+  if (!list || !list.lastElementChild) return;
+  list.insertBefore(list.lastElementChild, list.firstElementChild);
 }
 // =============================
 // Listeners (uno por ejercicio)
