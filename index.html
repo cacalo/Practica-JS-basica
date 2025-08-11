@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Laboratorio de Retos JavaScript Básico (20)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <h1>Laboratorio de Retos de JavaScript (20)</h1>
+    <p class="tagline">Completa cada tarjeta escribiendo código en <code>script.js</code>. Luego clickeá <strong>Ejecutar Pruebas</strong>.</p>
+    <div class="actions">
+      <button id="runTestsBtn" class="primary">Ejecutar Pruebas</button>
+    </div>
+  <div id="globalTestStatus" class="global-test-status" aria-live="polite">Pendiente: 20</div>
+    <p class="hint">Abre <code>script.js</code> y busca los bloques TODO. Usa solo JavaScript puro (sin librerías).</p>
+  </header>
+
+  <main class="grid" id="challengeGrid">
+    <!-- Nuevo orden -->
+    <!-- 1 (antes 1) -->
+    <section class="card" data-challenge="duplicate">
+      <h2>1. Duplicar un elemento</h2>
+      <p>Al hacer clic duplica el cuadro de color y lo agrega al final.</p>
+      <div class="play-area">
+        <div class="box-container" id="duplicateBoxContainer">
+          <div class="box" aria-label="caja de color"></div>
+        </div>
+        <button class="run" id="duplicateBtn">Duplicar caja</button>
+      </div>
+      <div class="test-status" id="status-duplicate">Sin probar.</div>
+    </section>
+    <!-- 2 (antes 3) -->
+    <section class="card" data-challenge="dark-mode">
+      <h2>2. Modo oscuro</h2>
+      <p>Alterna la clase <code>dark</code> en <code>&lt;body&gt;</code> y cambia el texto del botón.</p>
+      <div class="play-area">
+        <button class="run" id="darkModeBtn">Modo Oscuro</button>
+      </div>
+      <div class="test-status" id="status-dark-mode">Sin probar.</div>
+    </section>
+    <!-- 3 (antes 17) -->
+    <section class="card" data-challenge="enable-btn">
+      <h2>3. Habilitar botón</h2>
+      <p>El botón se habilita solo si se marca la casilla.</p>
+      <div class="play-area">
+        <label><input type="checkbox" id="termsChk" /> Acepto</label>
+        <button class="run" id="acceptBtn" disabled>Aceptar</button>
+      </div>
+      <div class="test-status" id="status-enable-btn">Sin probar.</div>
+    </section>
+    <!-- 4 (antes 20) -->
+    <section class="card" data-challenge="random-number">
+      <h2>4. Número aleatorio 1-10</h2>
+      <p>Genera y muestra un número entero entre 1 y 10.</p>
+      <div class="play-area">
+        <button class="run" id="randomNumberBtn">Generar</button>
+        <span id="randomNumberSpan"></span>
+      </div>
+      <div class="test-status" id="status-random-number">Sin probar.</div>
+    </section>
+    <!-- 5 (antes 4) -->
+    <section class="card" data-challenge="counter">
+      <h2>5. Contador</h2>
+      <p>Los botones suman y restan. Nunca baja de 0.</p>
+      <div class="play-area counter">
+        <button class="run" id="decrementBtn" aria-label="restar">-</button>
+        <span id="counterValue" class="counter-value">0</span>
+        <button class="run" id="incrementBtn" aria-label="sumar">+</button>
+      </div>
+      <div class="test-status" id="status-counter">Sin probar.</div>
+    </section>
+    <!-- 6 (antes 10) -->
+    <section class="card" data-challenge="toggle-text">
+      <h2>6. Mostrar / Ocultar</h2>
+      <p>El botón alterna la visibilidad del texto.</p>
+      <div class="play-area">
+        <p id="toggleTextP">Este texto se puede ocultar.</p>
+        <button class="run" id="toggleTextBtn">Ocultar</button>
+      </div>
+      <div class="test-status" id="status-toggle-text">Sin probar.</div>
+    </section>
+    <!-- 7 (antes 2) -->
+    <section class="card" data-challenge="sort-list">
+      <h2>7. Mayúsculas</h2>
+      <p>Convierte todos los elementos de la lista a MAYÚSCULAS.</p>
+      <div class="play-area">
+        <ul id="fruitList" class="unstyled">
+          <li>Naranja</li>
+          <li>banana</li>
+          <li>Manzana</li>
+          <li>uva</li>
+          <li>Kiwi</li>
+        </ul>
+        <button class="run" id="sortListBtn">A mayúsculas</button>
+      </div>
+      <div class="test-status" id="status-sort-list">Sin probar.</div>
+    </section>
+    <!-- 8 (antes 6) -->
+    <section class="card" data-challenge="reverse-text">
+      <h2>8. Invertir texto</h2>
+      <p>Al pulsar el botón muestra el texto invertido.</p>
+      <div class="play-area">
+        <input id="reverseInput" placeholder="Escribe" />
+        <button class="run" id="reverseBtn">Invertir</button>
+        <span id="reverseOutput"></span>
+      </div>
+      <div class="test-status" id="status-reverse-text">Sin probar.</div>
+    </section>
+    <!-- 9 (antes 5) -->
+    <section class="card" data-challenge="filter">
+      <h2>9. Filtrar lista</h2>
+      <p>Muestra solo los animales que contienen el texto. Limpiar restaura.</p>
+      <div class="play-area">
+        <input id="filterInput" placeholder="Texto a filtrar" />
+        <button class="run" id="filterBtn">Filtrar</button>
+        <button class="secondary" id="clearFilterBtn">Limpiar</button>
+        <ul id="animalList" class="unstyled multi">
+          <li>Perro</li>
+          <li>Gato</li>
+          <li>Caballo</li>
+          <li>León</li>
+          <li>elefante</li>
+        </ul>
+      </div>
+      <div class="test-status" id="status-filter">Sin probar.</div>
+    </section>
+    <!-- 10 (antes 7) -->
+    <section class="card" data-challenge="sumar">
+      <h2>10. Sumar números</h2>
+      <p>Suma los dos campos y muestra el resultado.</p>
+      <div class="play-area">
+        <input id="sumA" type="number" value="0" />+
+        <input id="sumB" type="number" value="0" />
+        <button class="run" id="sumBtn">Sumar</button>
+        = <span id="sumResult">0</span>
+      </div>
+      <div class="test-status" id="status-sumar">Sin probar.</div>
+    </section>
+    <!-- 11 (antes 11) -->
+    <section class="card" data-challenge="char-count">
+      <h2>11. Contar caracteres</h2>
+      <p>Muestra cuántos caracteres tiene el texto.</p>
+      <div class="play-area">
+        <textarea id="charTextarea" rows="2" cols="18" placeholder="Escribe..."></textarea>
+        <span><span id="charCountSpan">0</span> caracteres</span>
+      </div>
+      <div class="test-status" id="status-char-count">Sin probar.</div>
+    </section>
+    <!-- 12 (antes 8) -->
+    <section class="card" data-challenge="ciclar-color">
+      <h2>12. Ciclar color</h2>
+      <p>Cambia el color de la caja por una lista de colores.</p>
+      <div class="play-area">
+        <div id="colorCycleBox" style="width:40px;height:40px;background:#ff595e;border-radius:6px;"></div>
+        <button class="run" id="colorCycleBtn">Cambiar color</button>
+      </div>
+      <div class="test-status" id="status-ciclar-color">Sin probar.</div>
+    </section>
+    <!-- 13 (antes 9) -->
+    <section class="card" data-challenge="color-aleatorio">
+      <h2>13. Alternar forma</h2>
+      <p>Alterna entre cuadrado y círculo.</p>
+      <div class="play-area">
+        <div id="shapeBox" style="width:40px;height:40px;background:#444;border-radius:6px;transition:.2s"></div>
+        <button class="run" id="randomColorBtn">Cambiar forma</button>
+        <span id="shapeState">Cuadrado</span>
+      </div>
+      <div class="test-status" id="status-color-aleatorio">Sin probar.</div>
+    </section>
+    <!-- 14 (antes 12) -->
+    <section class="card" data-challenge="add-item">
+      <h2>14. Agregar elemento a lista</h2>
+      <p>Agrega un &lt;li&gt; con el texto ingresado.</p>
+      <div class="play-area">
+        <input id="addItemInput" placeholder="Elemento" />
+        <button class="run" id="addItemBtn">Agregar</button>
+        <ul id="addItemList" class="unstyled">
+          <li>Uno</li>
+          <li>Dos</li>
+        </ul>
+      </div>
+      <div class="test-status" id="status-add-item">Sin probar.</div>
+    </section>
+    <!-- 15 (antes 13) -->
+    <section class="card" data-challenge="remove-last">
+      <h2>15. Eliminar último</h2>
+      <p>Elimina el último elemento de la lista.</p>
+      <div class="play-area">
+        <ul id="removeList" class="unstyled">
+          <li>A</li><li>B</li><li>C</li>
+        </ul>
+        <button class="run" id="removeLastBtn">Eliminar último</button>
+      </div>
+      <div class="test-status" id="status-remove-last">Sin probar.</div>
+    </section>
+    <!-- 16 (antes 14) -->
+    <section class="card" data-challenge="email">
+      <h2>16. No vacío</h2>
+      <p>El campo es válido solo si no está vacío.</p>
+      <div class="play-area">
+        <input id="emailInput" placeholder="Escribe algo" />
+        <button class="run" id="validateEmailBtn">Comprobar</button>
+      </div>
+      <div class="test-status" id="status-email">Sin probar.</div>
+    </section>
+    <!-- 17 (antes 16) -->
+    <section class="card" data-challenge="celsius">
+      <h2>17. Celsius → Fahrenheit</h2>
+      <p>Convierte y muestra el resultado.</p>
+      <div class="play-area">
+        <input id="celsiusInput" type="number" value="0" /> °C
+        <button class="run" id="convertBtn">Convertir</button>
+        = <span id="fahrenheitResult">32</span> °F
+      </div>
+      <div class="test-status" id="status-celsius">Sin probar.</div>
+    </section>
+    <!-- 18 (antes 15) -->
+    <section class="card" data-challenge="active-item">
+      <h2>18. Divisible</h2>
+      <p>Indica si el numerador es divisible por el denominador.</p>
+      <div class="play-area">
+        <input id="divNum" type="number" placeholder="Numerador" value="14" />
+        /
+        <input id="divDen" type="number" placeholder="Denominador" value="7" />
+        <button class="run" id="divideCheckBtn">Comprobar</button>
+        = <span id="divideResult">?</span>
+      </div>
+      <div class="test-status" id="status-active-item">Sin probar.</div>
+    </section>
+    <!-- 19 (antes 18) -->
+    <section class="card" data-challenge="sort-numbers">
+      <h2>19. Ordenar números</h2>
+      <p>Ordena los números de menor a mayor.</p>
+      <div class="play-area">
+        <ul id="numberList" class="unstyled multi">
+          <li>5</li><li>2</li><li>9</li><li>1</li><li>4</li>
+        </ul>
+        <button class="run" id="sortNumbersBtn">Ordenar números</button>
+      </div>
+      <div class="test-status" id="status-sort-numbers">Sin probar.</div>
+    </section>
+    <!-- 20 (antes 19) -->
+    <section class="card" data-challenge="shuffle">
+      <h2>20. Rotar lista</h2>
+      <p>Mueve el último elemento al principio.</p>
+      <div class="play-area">
+        <ul id="shuffleList" class="unstyled multi">
+          <li>A</li><li>B</li><li>C</li><li>D</li><li>E</li>
+        </ul>
+        <button class="run" id="shuffleBtn">Rotar</button>
+      </div>
+      <div class="test-status" id="status-shuffle">Sin probar.</div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Hecho con ❤️ para sus alumnos por Gonzalo Bechara.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
