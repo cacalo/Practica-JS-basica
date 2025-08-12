@@ -1,8 +1,12 @@
-# Laboratorio de Retos JavaScript (20)
+# Laboratorio de Retos JavaScript
 
 Colección de 20 mini–retos con JavaScript puro para practicar manipulación del DOM, eventos y lógica básica. El alumnado resuelve editando `script.js` (bloques TODO) y pulsa **Ejecutar Pruebas** para validar.
 
-## Retos (nuevo orden)
+## Reglas
+El objetivo es escirbir código para practicar tareas habituales de desarrollo web en javascript. Para que estos ejercicios tengan sentido es necesario desactivar el autocompletado de inteligencia artificial que puedas tener en el IDE. Si estás usando VSCode con copilot podés ir con el cursor al ícono de copilot abajo a la derecha y desactivar desde ahí el "Code completions". Si querés hacerlo con la IA nada te detiene, pero para eso ni los hagas.
+Si algo no te sale podés googlearlo sin problema, buscar recursos externos es parte del trabajo, pero asegurate de entender lo que estás copiando.
+
+## Retos
 1. Duplicar un elemento
 2. Modo oscuro
 3. Habilitar botón con checkbox
@@ -24,7 +28,7 @@ Colección de 20 mini–retos con JavaScript puro para practicar manipulación d
 19. Ordenar números
 20. Rotar lista (último -> primero)
 
-## Uso (Estudiante)
+## Uso
 1. Abre `index.html` en el navegador.
 2. Abre `script.js` y localiza los comentarios TODO.
 3. Implementa cada reto con JS puro.
@@ -33,3 +37,4 @@ Colección de 20 mini–retos con JavaScript puro para practicar manipulación d
 
 ## Licencia
 MIT – Libre para uso educativo.
+Hecho con ❤️ para sus alumnos por Gonzalo Bechara.
