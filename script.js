@@ -200,11 +200,15 @@ const tests = [
       valEl.textContent = "0";
       inc.click();
       inc.click();
+      const afterInc = Number(valEl.textContent);
       dec.click();
       dec.click();
       dec.click();
       const value = Number(valEl.textContent);
-      return { pass: value === 0, message: "Counter ended at " + value };
+      return {
+        pass: afterInc === 2 && value === 0,
+        message: "After +2 got " + afterInc + ", counter ended at " + value,
+      };
     },
   },
   // 6 Mostrar/Ocultar
