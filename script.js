@@ -130,13 +130,19 @@ const tests = [
         return { pass: false, message: "Missing elements" };
       const before = container.children.length;
       btn.click();
-      const after = container.children.length;
+      const afterOne = container.children.length;
+      btn.click();
+      const afterTwo = container.children.length;
+      const lastIsBox =
+        !!container.lastElementChild &&
+        container.lastElementChild.classList.contains("box");
+      const pass =
+        afterOne === before + 1 && afterTwo === before + 2 && lastIsBox;
       return {
-        pass: after === before + 1,
-        message:
-          after === before + 1
-            ? "Duplicated successfully"
-            : "Expected " + (before + 1) + " got " + after,
+        pass,
+        message: pass
+          ? "Duplicated successfully"
+          : `Expected growth of 1 per click (got ${before}->${afterOne}->${afterTwo}), last child .box: ${lastIsBox}`,
       };
     },
   },
@@ -146,18 +152,30 @@ const tests = [
     run: () => {
       const btn = document.getElementById("darkModeBtn");
       if (!btn) return { pass: false, message: "Missing button" };
-      const before = document.body.classList.contains("dark");
-      btn.click();
-      const toggled = document.body.classList.contains("dark") !== before;
-      const labelCorrect = [
+      const validLabels = [
         "Dark Mode",
         "Light Mode",
         "Modo Oscuro",
         "Modo Claro",
-      ].includes(btn.textContent.trim());
+      ];
+      const initialDark = document.body.classList.contains("dark");
+      const initialLabel = btn.textContent.trim();
+      btn.click();
+      const toggledDark = document.body.classList.contains("dark");
+      const toggledLabel = btn.textContent.trim();
+      btn.click();
+      const backDark = document.body.classList.contains("dark");
+      const backLabel = btn.textContent.trim();
+      const pass =
+        toggledDark !== initialDark &&
+        validLabels.includes(toggledLabel) &&
+        backDark === initialDark &&
+        backLabel === initialLabel;
       return {
-        pass: toggled && labelCorrect,
-        message: toggled ? "Toggled" : "Did not toggle",
+        pass,
+        message: pass
+          ? "Toggled and reverted correctly"
+          : "Toggle/label did not round-trip correctly",
       };
     },
   },
@@ -170,9 +188,16 @@ const tests = [
       if (!chk || !btn) return { pass: false, message: "Missing" };
       chk.checked = true;
       chk.dispatchEvent(new Event("change"));
+      const enabledWhenChecked = btn.disabled === false;
+      chk.checked = false;
+      chk.dispatchEvent(new Event("change"));
+      const disabledWhenUnchecked = btn.disabled === true;
+      const pass = enabledWhenChecked && disabledWhenUnchecked;
       return {
-        pass: btn.disabled === false,
-        message: "Enabled " + !btn.disabled,
+        pass,
+        message: pass
+          ? "Enables and disables correctly"
+          : `Checked->enabled: ${enabledWhenChecked}, unchecked->disabled: ${disabledWhenUnchecked}`,
       };
     },
   },
@@ -183,9 +208,17 @@ const tests = [
       const btn = document.getElementById("randomNumberBtn");
       const span = document.getElementById("randomNumberSpan");
       if (!btn || !span) return { pass: false, message: "Missing" };
-      btn.click();
-      const n = Number(span.textContent);
-      return { pass: n >= 1 && n <= 10, message: "Value " + n };
+      let ok = true;
+      let lastN;
+      for (let i = 0; i < 10; i++) {
+        btn.click();
+        lastN = Number(span.textContent);
+        if (!Number.isInteger(lastN) || lastN < 1 || lastN > 10) {
+          ok = false;
+          break;
+        }
+      }
+      return { pass: ok, message: ok ? "Values are valid integers 1-10" : "Got invalid value " + lastN };
     },
   },
   // 5 Contador
@@ -198,6 +231,8 @@ const tests = [
       if (!inc || !dec || !valEl)
         return { pass: false, message: "Missing elements" };
       valEl.textContent = "0";
+      dec.click();
+      const staysAtZero = Number(valEl.textContent) === 0;
       inc.click();
       inc.click();
       const afterInc = Number(valEl.textContent);
@@ -205,9 +240,10 @@ const tests = [
       dec.click();
       dec.click();
       const value = Number(valEl.textContent);
+      const pass = staysAtZero && afterInc === 2 && value === 0;
       return {
-        pass: afterInc === 2 && value === 0,
-        message: "After +2 got " + afterInc + ", counter ended at " + value,
+        pass,
+        message: `From 0, decrementing stayed non-negative: ${staysAtZero}; after +2 got ${afterInc}, counter ended at ${value}`,
       };
     },
   },
@@ -220,8 +256,16 @@ const tests = [
       if (!p || !btn) return { pass: false, message: "Missing" };
       const wasHidden = p.classList.contains("hidden");
       btn.click();
-      const nowHidden = p.classList.contains("hidden");
-      return { pass: wasHidden !== nowHidden, message: "Visibility toggled" };
+      const afterOne = p.classList.contains("hidden");
+      btn.click();
+      const afterTwo = p.classList.contains("hidden");
+      const pass = afterOne !== wasHidden && afterTwo === wasHidden;
+      return {
+        pass,
+        message: pass
+          ? "Visibility toggles both ways"
+          : "Visibility did not toggle consistently",
+      };
     },
   },
   // 7 Mayúsculas
@@ -231,12 +275,17 @@ const tests = [
       const list = document.getElementById("fruitList");
       const btn = document.getElementById("sortListBtn");
       if (!list || !btn) return { pass: false, message: "Missing elements" };
+      const before = Array.from(list.children).map((li) => li.textContent);
       btn.click();
-      const texts = Array.from(list.children).map((li) => li.textContent);
-      const allUpper = texts.every((t) => t === t.toUpperCase());
+      const after = Array.from(list.children).map((li) => li.textContent);
+      const sameLength = after.length === before.length;
+      const matchesOriginal =
+        sameLength && after.every((t, i) => t === before[i].toUpperCase());
       return {
-        pass: allUpper,
-        message: allUpper ? "All uppercased" : "Not all uppercased",
+        pass: matchesOriginal,
+        message: matchesOriginal
+          ? "All uppercased, order and count preserved"
+          : "Not all uppercased, or order/count changed",
       };
     },
   },
@@ -251,9 +300,14 @@ const tests = [
         return { pass: false, message: "Missing elements" };
       input.value = "hola";
       btn.click();
+      const first = out.textContent === "aloh";
+      input.value = "Javascript 2024";
+      btn.click();
+      const second = out.textContent === "4202 tpircsavaJ";
+      const pass = first && second;
       return {
-        pass: out.textContent === "aloh",
-        message: "Expected aloh got " + out.textContent,
+        pass,
+        message: pass ? "Reverses correctly" : `Got "${out.textContent}"`,
       };
     },
   },
@@ -267,18 +321,25 @@ const tests = [
       const list = document.getElementById("animalList");
       if (!input || !filterBtn || !clearBtn || !list)
         return { pass: false, message: "Missing elements" };
+      const items = Array.from(list.children);
       input.value = "o";
       filterBtn.click();
-      const items = Array.from(list.children);
-      const visible = items
-        .filter((li) => li.style.display !== "none")
-        .map((li) => li.textContent.toLowerCase());
-      const allContain = visible.every((t) => t.includes("o"));
+      const visible = items.filter((li) => li.style.display !== "none");
+      const hidden = items.filter((li) => li.style.display === "none");
+      const allVisibleContain =
+        visible.length > 0 &&
+        visible.every((li) => li.textContent.toLowerCase().includes("o"));
+      const allHiddenExclude = hidden.every(
+        (li) => !li.textContent.toLowerCase().includes("o")
+      );
       clearBtn.click();
       const restored = items.every((li) => li.style.display !== "none");
+      const pass = allVisibleContain && allHiddenExclude && restored;
       return {
-        pass: allContain && restored,
-        message: allContain ? "Filter works" : "Filter failed",
+        pass,
+        message: pass
+          ? "Filter works"
+          : `Visible: ${visible.length}, Hidden: ${hidden.length}, restored: ${restored}`,
       };
     },
   },
@@ -295,9 +356,15 @@ const tests = [
       a.value = "7";
       b.value = "5";
       btn.click();
+      const first = res.textContent === "12";
+      a.value = "-3";
+      b.value = "1.5";
+      btn.click();
+      const second = Number(res.textContent) === -1.5;
+      const pass = first && second;
       return {
-        pass: res.textContent === "12",
-        message: "Result " + res.textContent,
+        pass,
+        message: pass ? "Sums correctly" : `Got "${res.textContent}"`,
       };
     },
   },
@@ -310,9 +377,14 @@ const tests = [
       if (!ta || !span) return { pass: false, message: "Missing elements" };
       ta.value = "abcd";
       ta.dispatchEvent(new Event("input"));
+      const first = span.textContent === "4";
+      ta.value = "";
+      ta.dispatchEvent(new Event("input"));
+      const second = span.textContent === "0";
+      const pass = first && second;
       return {
-        pass: span.textContent === "4",
-        message: "Count " + span.textContent,
+        pass,
+        message: pass ? "Counts correctly" : "Count " + span.textContent,
       };
     },
   },
@@ -323,11 +395,22 @@ const tests = [
       const box = document.getElementById("colorCycleBox");
       const btn = document.getElementById("colorCycleBtn");
       if (!box || !btn) return { pass: false, message: "Missing elements" };
-      const before = box.style.backgroundColor;
-      btn.click();
+      const seen = [];
+      for (let i = 0; i < _cicloColores.length + 1; i++) {
+        btn.click();
+        seen.push(box.style.backgroundColor);
+      }
+      const allDefined = seen.every((c) => !!c);
+      const wraps = seen[0] === seen[_cicloColores.length];
+      const varies =
+        new Set(seen.slice(0, _cicloColores.length)).size ===
+        _cicloColores.length;
+      const pass = allDefined && wraps && varies;
       return {
-        pass: box.style.backgroundColor !== before,
-        message: "Color changed",
+        pass,
+        message: pass
+          ? "Cycles through all colors and wraps around"
+          : "Did not cycle through all colors / did not wrap",
       };
     },
   },
@@ -338,13 +421,19 @@ const tests = [
       const box = document.getElementById("shapeBox");
       const btn = document.getElementById("randomColorBtn");
       if (!box || !btn) return { pass: false, message: "Missing elements" };
-      const before = box.style.borderRadius;
+      const validShapes = ["50%", "6px"];
+      const initial = box.style.borderRadius;
       btn.click();
-      const after = box.style.borderRadius;
-      const toggled = before !== after && (after === "50%" || after === "6px");
+      const afterOne = box.style.borderRadius;
+      btn.click();
+      const afterTwo = box.style.borderRadius;
+      const pass =
+        validShapes.includes(afterOne) &&
+        afterOne !== initial &&
+        afterTwo === initial;
       return {
-        pass: toggled,
-        message: toggled ? "Shape toggled" : "No toggle",
+        pass,
+        message: pass ? "Shape toggles both ways" : "No consistent toggle",
       };
     },
   },
@@ -360,7 +449,19 @@ const tests = [
       const before = list.children.length;
       input.value = "Nuevo";
       btn.click();
-      return { pass: list.children.length === before + 1, message: "Added" };
+      const afterOne = list.children.length;
+      const textOk =
+        !!list.lastElementChild && list.lastElementChild.textContent === "Nuevo";
+      input.value = "Otro";
+      btn.click();
+      const afterTwo = list.children.length;
+      const pass = afterOne === before + 1 && afterTwo === before + 2 && textOk;
+      return {
+        pass,
+        message: pass
+          ? "Adds items with correct text"
+          : `Counts ${before}->${afterOne}->${afterTwo}, text ok: ${textOk}`,
+      };
     },
   },
   // 15 Eliminar último
@@ -370,11 +471,27 @@ const tests = [
       const list = document.getElementById("removeList");
       const btn = document.getElementById("removeLastBtn");
       if (!list || !btn) return { pass: false, message: "Missing" };
-      const before = list.children.length;
+      const before = Array.from(list.children).map((li) => li.textContent);
       btn.click();
+      const afterOne = Array.from(list.children).map((li) => li.textContent);
+      const removedLast =
+        afterOne.length === before.length - 1 &&
+        afterOne.every((t, i) => t === before[i]);
+      let noErrorOnEmpty = true;
+      for (let i = 0; i < before.length; i++) {
+        try {
+          btn.click();
+        } catch (e) {
+          noErrorOnEmpty = false;
+        }
+      }
+      const emptied = list.children.length === 0;
+      const pass = removedLast && noErrorOnEmpty && emptied;
       return {
-        pass: list.children.length === Math.max(0, before - 1),
-        message: "Removed",
+        pass,
+        message: pass
+          ? "Removes the last item safely down to empty"
+          : `Removed correct item: ${removedLast}, safe when empty: ${noErrorOnEmpty}, emptied: ${emptied}`,
       };
     },
   },
@@ -387,13 +504,25 @@ const tests = [
       if (!input || !btn) return { pass: false, message: "Missing" };
       input.value = "";
       btn.click();
-      const invalid = input.classList.contains("invalido");
+      const invalid =
+        input.classList.contains("invalido") &&
+        !input.classList.contains("valido");
       input.value = "algo";
       btn.click();
-      const valid = input.classList.contains("valido");
+      const valid =
+        input.classList.contains("valido") &&
+        !input.classList.contains("invalido");
+      input.value = "";
+      btn.click();
+      const invalidAgain =
+        input.classList.contains("invalido") &&
+        !input.classList.contains("valido");
+      const pass = invalid && valid && invalidAgain;
       return {
-        pass: invalid && valid,
-        message: invalid && valid ? "Validated" : "Validation failed",
+        pass,
+        message: pass
+          ? "Validates and re-validates correctly"
+          : "Validation failed or classes overlap",
       };
     },
   },
@@ -407,9 +536,14 @@ const tests = [
       if (!input || !btn || !out) return { pass: false, message: "Missing" };
       input.value = "100";
       btn.click();
+      const first = out.textContent === "212.0";
+      input.value = "0";
+      btn.click();
+      const second = out.textContent === "32.0";
+      const pass = first && second;
       return {
-        pass: out.textContent === "212.0",
-        message: "Conv " + out.textContent,
+        pass,
+        message: pass ? "Converts correctly" : `Got "${out.textContent}"`,
       };
     },
   },
@@ -447,14 +581,20 @@ const tests = [
       const list = document.getElementById("numberList");
       const btn = document.getElementById("sortNumbersBtn");
       if (!list || !btn) return { pass: false, message: "Missing" };
-      btn.click();
-      const nums = Array.from(list.children).map((li) =>
+      const before = Array.from(list.children).map((li) =>
         Number(li.textContent)
       );
-      const sorted = [...nums].sort((a, b) => a - b);
+      btn.click();
+      const after = Array.from(list.children).map((li) =>
+        Number(li.textContent)
+      );
+      const expected = [...before].sort((a, b) => a - b);
+      const pass = JSON.stringify(after) === JSON.stringify(expected);
       return {
-        pass: JSON.stringify(nums) === JSON.stringify(sorted),
-        message: "Sorted",
+        pass,
+        message: pass
+          ? "Sorted correctly"
+          : `Expected ${expected} got ${after}`,
       };
     },
   },
@@ -493,6 +633,14 @@ function runTests() {
     if (t.id === "counter") {
       const valEl = document.getElementById("counterValue");
       if (valEl) valEl.textContent = "0";
+    }
+    if (t.id === "remove-last") {
+      const list = document.getElementById("removeList");
+      if (list) list.innerHTML = "<li>A</li><li>B</li><li>C</li>";
+    }
+    if (t.id === "add-item") {
+      const list = document.getElementById("addItemList");
+      if (list) list.innerHTML = "<li>Uno</li><li>Dos</li>";
     }
   });
   let passed = 0;

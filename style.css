@@ -12,6 +12,7 @@
   --radius: 10px;
   --shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.06);
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, sans-serif;
+  color-scheme: light;
 }
 body {
   margin: 0;
@@ -30,6 +31,7 @@ body.dark {
   --accent: #4493f8;
   --accent-accent: #1f6feb;
   --danger: #ff6b6b;
+  color-scheme: dark;
 }
 .site-header,
 .site-footer {
@@ -69,6 +71,27 @@ button {
   color: #fff;
   padding: 0.55rem 0.95rem;
   transition: background 0.15s, transform 0.15s;
+}
+input,
+textarea,
+select {
+  font: inherit;
+  color: var(--text);
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--text);
+  opacity: 0.5;
+}
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
 }
 button.secondary {
   background: transparent;
@@ -234,6 +257,14 @@ body.dark .test-status {
   background: #ffe3e3;
   color: #8a1f1f;
 }
+body.dark .test-status.pass {
+  background: #10331f;
+  color: #7ee2a8;
+}
+body.dark .test-status.fail {
+  background: #3a1414;
+  color: #ff9b9b;
+}
 .solution {
   font-size: 0.75rem;
 }
@@ -282,3 +313,5 @@ code {
 body.dark .global-test-status { background:#1f242c; color:#9fb3c8; }
 .global-test-status.ok { background:#d1ffe3; color:#0f6e37; }
 .global-test-status.fail { background:#ffe3e3; color:#8a1f1f; }
+body.dark .global-test-status.ok { background:#10331f; color:#7ee2a8; }
+body.dark .global-test-status.fail { background:#3a1414; color:#ff9b9b; }
